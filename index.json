@@ -1,0 +1,166 @@
+{
+  "company": "OncoClear Diagnostics",
+  "course": "BIOT 5219",
+  "topic": "Topic 6 - Cancer Diagnostic Imaging Agent",
+  "series": "Series A",
+  "datasets": {
+
+    "market_size": {
+      "description": "TAM / SAM / SOM in USD Billions (2023–2033)",
+      "fields": ["Year", "Market_Segment", "Value_USD_Billions"],
+      "data": [
+        { "Year": 2023, "Market_Segment": "TAM", "Value_USD_Billions": 8.2  },
+        { "Year": 2023, "Market_Segment": "SAM", "Value_USD_Billions": 2.1  },
+        { "Year": 2023, "Market_Segment": "SOM", "Value_USD_Billions": 0.0  },
+        { "Year": 2025, "Market_Segment": "TAM", "Value_USD_Billions": 10.4 },
+        { "Year": 2025, "Market_Segment": "SAM", "Value_USD_Billions": 2.9  },
+        { "Year": 2025, "Market_Segment": "SOM", "Value_USD_Billions": 0.0  },
+        { "Year": 2027, "Market_Segment": "TAM", "Value_USD_Billions": 13.1 },
+        { "Year": 2027, "Market_Segment": "SAM", "Value_USD_Billions": 3.8  },
+        { "Year": 2027, "Market_Segment": "SOM", "Value_USD_Billions": 0.18 },
+        { "Year": 2029, "Market_Segment": "TAM", "Value_USD_Billions": 16.6 },
+        { "Year": 2029, "Market_Segment": "SAM", "Value_USD_Billions": 5.0  },
+        { "Year": 2029, "Market_Segment": "SOM", "Value_USD_Billions": 0.62 },
+        { "Year": 2031, "Market_Segment": "TAM", "Value_USD_Billions": 21.0 },
+        { "Year": 2031, "Market_Segment": "SAM", "Value_USD_Billions": 6.5  },
+        { "Year": 2031, "Market_Segment": "SOM", "Value_USD_Billions": 1.45 },
+        { "Year": 2033, "Market_Segment": "TAM", "Value_USD_Billions": 26.5 },
+        { "Year": 2033, "Market_Segment": "SAM", "Value_USD_Billions": 8.4  },
+        { "Year": 2033, "Market_Segment": "SOM", "Value_USD_Billions": 2.90 }
+      ]
+    },
+
+    "revenue_forecast": {
+      "description": "Projected Revenue vs Operating Costs vs Net Income in USD Millions (2026–2032)",
+      "fields": ["Year", "Category", "Value_USD_Millions"],
+      "data": [
+        { "Year": 2026, "Category": "Projected Revenue", "Value_USD_Millions": 0.0   },
+        { "Year": 2026, "Category": "Operating Costs",   "Value_USD_Millions": 18.0  },
+        { "Year": 2026, "Category": "Net Income",        "Value_USD_Millions": -18.0 },
+        { "Year": 2027, "Category": "Projected Revenue", "Value_USD_Millions": 0.0   },
+        { "Year": 2027, "Category": "Operating Costs",   "Value_USD_Millions": 32.0  },
+        { "Year": 2027, "Category": "Net Income",        "Value_USD_Millions": -32.0 },
+        { "Year": 2028, "Category": "Projected Revenue", "Value_USD_Millions": 4.2   },
+        { "Year": 2028, "Category": "Operating Costs",   "Value_USD_Millions": 28.0  },
+        { "Year": 2028, "Category": "Net Income",        "Value_USD_Millions": -23.8 },
+        { "Year": 2029, "Category": "Projected Revenue", "Value_USD_Millions": 12.8  },
+        { "Year": 2029, "Category": "Operating Costs",   "Value_USD_Millions": 22.0  },
+        { "Year": 2029, "Category": "Net Income",        "Value_USD_Millions": -9.2  },
+        { "Year": 2030, "Category": "Projected Revenue", "Value_USD_Millions": 31.5  },
+        { "Year": 2030, "Category": "Operating Costs",   "Value_USD_Millions": 18.0  },
+        { "Year": 2030, "Category": "Net Income",        "Value_USD_Millions": 13.5  },
+        { "Year": 2031, "Category": "Projected Revenue", "Value_USD_Millions": 68.4  },
+        { "Year": 2031, "Category": "Operating Costs",   "Value_USD_Millions": 15.0  },
+        { "Year": 2031, "Category": "Net Income",        "Value_USD_Millions": 53.4  },
+        { "Year": 2032, "Category": "Projected Revenue", "Value_USD_Millions": 145.0 },
+        { "Year": 2032, "Category": "Operating Costs",   "Value_USD_Millions": 12.0  },
+        { "Year": 2032, "Category": "Net Income",        "Value_USD_Millions": 133.0 }
+      ]
+    },
+
+    "competitive_landscape": {
+      "description": "Key competitor metrics vs OncoClear",
+      "fields": ["Company", "Product", "Sensitivity_Pct", "Specificity_Pct", "Price_USD", "Total_Funding_USD_Millions", "Stage", "Is_OncoClear"],
+      "data": [
+        {
+          "Company": "GRAIL",
+          "Product": "Galleri",
+          "Sensitivity_Pct": 75,
+          "Specificity_Pct": 99,
+          "Price_USD": 949,
+          "Total_Funding_USD_Millions": 1900,
+          "Stage": "Commercial",
+          "Is_OncoClear": false
+        },
+        {
+          "Company": "Guardant Health",
+          "Product": "Shield",
+          "Sensitivity_Pct": 83,
+          "Specificity_Pct": 90,
+          "Price_USD": 895,
+          "Total_Funding_USD_Millions": 1200,
+          "Stage": "Commercial",
+          "Is_OncoClear": false
+        },
+        {
+          "Company": "PathAI",
+          "Product": "AISight",
+          "Sensitivity_Pct": 91,
+          "Specificity_Pct": 94,
+          "Price_USD": 600,
+          "Total_Funding_USD_Millions": 240,
+          "Stage": "Clinical",
+          "Is_OncoClear": false
+        },
+        {
+          "Company": "OncoClear Diagnostics",
+          "Product": "ClearScan-MC",
+          "Sensitivity_Pct": 88,
+          "Specificity_Pct": 97,
+          "Price_USD": 490,
+          "Total_Funding_USD_Millions": 120,
+          "Stage": "Pre-Clinical",
+          "Is_OncoClear": true
+        }
+      ]
+    },
+
+    "funding_ask": {
+      "description": "Series A $120M — Use of Proceeds Breakdown",
+      "fields": ["Category", "Percentage", "Amount_USD_Millions"],
+      "data": [
+        { "Category": "Phase I/II Clinical Trials",    "Percentage": 28, "Amount_USD_Millions": 33.6 },
+        { "Category": "R&D and Biomarker Development", "Percentage": 22, "Amount_USD_Millions": 26.4 },
+        { "Category": "Regulatory and FDA Submission", "Percentage": 18, "Amount_USD_Millions": 21.6 },
+        { "Category": "Manufacturing Scale-Up",        "Percentage": 15, "Amount_USD_Millions": 18.0 },
+        { "Category": "Commercial Launch Prep",        "Percentage": 10, "Amount_USD_Millions": 12.0 },
+        { "Category": "G&A and Operations",            "Percentage": 7,  "Amount_USD_Millions": 8.4  }
+      ]
+    },
+
+    "product_positioning_radar": {
+      "description": "OncoClear vs competitors across 6 dimensions scored out of 100",
+      "fields": ["Metric", "Company", "Score"],
+      "data": [
+        { "Metric": "Sensitivity",   "Company": "OncoClear", "Score": 88 },
+        { "Metric": "Sensitivity",   "Company": "GRAIL",     "Score": 75 },
+        { "Metric": "Sensitivity",   "Company": "Guardant",  "Score": 83 },
+        { "Metric": "Specificity",   "Company": "OncoClear", "Score": 97 },
+        { "Metric": "Specificity",   "Company": "GRAIL",     "Score": 99 },
+        { "Metric": "Specificity",   "Company": "Guardant",  "Score": 90 },
+        { "Metric": "Affordability", "Company": "OncoClear", "Score": 92 },
+        { "Metric": "Affordability", "Company": "GRAIL",     "Score": 48 },
+        { "Metric": "Affordability", "Company": "Guardant",  "Score": 52 },
+        { "Metric": "Stage Reach",   "Company": "OncoClear", "Score": 80 },
+        { "Metric": "Stage Reach",   "Company": "GRAIL",     "Score": 72 },
+        { "Metric": "Stage Reach",   "Company": "Guardant",  "Score": 78 },
+        { "Metric": "Cancer Types",  "Company": "OncoClear", "Score": 85 },
+        { "Metric": "Cancer Types",  "Company": "GRAIL",     "Score": 95 },
+        { "Metric": "Cancer Types",  "Company": "Guardant",  "Score": 60 },
+        { "Metric": "Access",        "Company": "OncoClear", "Score": 90 },
+        { "Metric": "Access",        "Company": "GRAIL",     "Score": 55 },
+        { "Metric": "Access",        "Company": "Guardant",  "Score": 60 }
+      ]
+    },
+
+    "kpi_summary": {
+      "description": "Top-level KPI cards for dashboard header",
+      "fields": ["KPI", "Value", "Unit", "Note"],
+      "data": [
+        { "KPI": "Global TAM (2033)",       "Value": 26.5, "Unit": "USD Billions", "Note": "Cancer Dx Imaging Market" },
+        { "KPI": "Target SAM",              "Value": 8.4,  "Unit": "USD Billions", "Note": "Blood-based Multi-Cancer" },
+        { "KPI": "Projected SOM (2033)",    "Value": 2.9,  "Unit": "USD Billions", "Note": "~11% market share" },
+        { "KPI": "Test Price Point",        "Value": 490,  "Unit": "USD",          "Note": "vs $895-$949 competitors" },
+        { "KPI": "Sensitivity (Pre-Clin.)", "Value": 88,   "Unit": "Percent",      "Note": "vs 75% GRAIL Galleri" },
+        { "KPI": "Total Funding Ask",       "Value": 120,  "Unit": "USD Millions", "Note": "Series A" },
+        { "KPI": "Anchor Investor Ask",     "Value": 40,   "Unit": "USD Millions", "Note": "Lead investor this round" },
+        { "KPI": "Break-Even Year",         "Value": 2029, "Unit": "Year",         "Note": "Post-FDA clearance" },
+        { "KPI": "FDA PMA Target",          "Value": 2030, "Unit": "Year",         "Note": "Expected submission" },
+        { "KPI": "Projected IRR",           "Value": 34,   "Unit": "Percent",      "Note": "5-year investor return" },
+        { "KPI": "Runway",                  "Value": 36,   "Unit": "Months",       "Note": "Post Series A close" },
+        { "KPI": "Market CAGR",             "Value": 15.3, "Unit": "Percent",      "Note": "2023-2033 growth rate" }
+      ]
+    }
+
+  }
+}
