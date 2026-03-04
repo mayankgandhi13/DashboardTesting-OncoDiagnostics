@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>OncoClear CFO Dashboard</title>
+<!-- Load order matters: React first, then ReactDOM, then Recharts -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/prop-types@15/prop-types.min.js" crossorigin></script>
+<script src="https://unpkg.com/recharts@2.7.2/umd/Recharts.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0D1B2A;font-family:'Segoe UI',sans-serif}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const {
+  BarChart, Bar, AreaChart, Area, RadarChart, Radar,
+  PolarGrid, PolarAngleAxis, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, LabelList
+} = Recharts;
+
+const { useState } = React;
+
+const C = {
+  bg:"#0D1B2A", card:"#112236", border:"#1E3A5F",
+  blue1:"#1A6FBA", blue2:"#2196F3", teal:"#00C9B1",
+  gold:"#F5C518", red:"#E05252", purple:"#8B5CF6",
+  muted:"#6B8CAE", dim:"#3A5270", white:"#F0F6FF", white2:"#A8C0D6"
+};
+
+const marketData = [
+  {year:"2023",TAM:8.2,SAM:2.1,SOM:0},
+  {year:"2025",TAM:10.4,SAM:2.9,SOM:0},
+  {year:"2027",TAM:13.1,SAM:3.8,SOM:0.18},
+  {year:"2029",TAM:16.6,SAM:5.0,SOM:0.62},
+  {year:"2031",TAM:21.0,SAM:6.5,SOM:1.45},
+  {year:"2033",TAM:26.5,SAM:8.4,SOM:2.90}
+];
+
+const revenueData = [
+  {year:"2026",revenue:0,costs:18,net:-18},
+  {year:"2027",revenue:0,costs:32,net:-32},
+  {year:"2028",revenue:4.2,costs:28,net:-23.8},
+  {year:"2029",revenue:12.8,costs:22,net:-9.2},
+  {year:"2030",revenue:31.5,costs:18,net:13.5},
+  {year:"2031",revenue:68.4,costs:15,net:53.4},
+  {year:"2032",revenue:145,costs:12,net:133}
+];
+
+const competitors = [
+  {name:"GRAIL",    sensitivity:75, specificity:99, price:949, stage:"Commercial"},
+  {name:"Guardant", sensitivity:83, specificity:90, price:895, stage:"Commercial"},
+  {name:"PathAI",   sensitivity:91, specificity:94, price:600, stage:"Clinical"},
+  {name:"OncoClear",sensitivity:88, specificity:97, price:490, stage:"Pre-Clin."}
+];
+
+const fundingPie = [
+  {name:"Phase I/II Trials",  value:28, amt:33.6, color:C.blue2},
+  {name:"R&D / Biomarker",    value:22, amt:26.4, color:C.teal},
+  {name:"FDA Regulatory",     value:18, amt:21.6, color:C.gold},
+  {name:"Manufacturing",      value:15, amt:18.0, color:C.purple},
+  {name:"Commercial Launch",  value:10, amt:12.0, color:C.blue1},
+  {name:"G&A / Ops",          value:7,  amt:8.4,  color:C.dim}
+];
+
+const radarData = [
+  {metric:"Sensitivity",  OncoClear:88, GRAIL:75, Guardant:83},
+  {metric:"Specificity",  OncoClear:97, GRAIL:99, Guardant:90},
+  {metric:"Affordability",OncoClear:92, GRAIL:48, Guardant:52},
+  {metric:"Stage Reach",  OncoClear:80, GRAIL:72, Guardant:78},
+  {metric:"Cancer Types", OncoClear:85, GRAIL:95, Guardant:60},
+  {metric:"Access",       OncoClear:90, GRAIL:55, Guardant:60}
+];
+
+const TT = ({active, payload, label, pre="$", suf=""}) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div style={{background:C.card, border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 14px", fontSize:11}}>
+      <div style={{color:C.teal, fontWeight:700, marginBottom:4}}>{label}</div>
+      {payload.map((p,i) => (
+        <div key={i} style={{color:p.color, margin:"2px 0"}}>
+          {p.name}: <b>{pre}{typeof p.value==="number" ? p.value.toFixed(1) : p.value}{suf}</b>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const Card = ({children, style={}}) => (
+  <div style={{background:C.card, border:`1px solid ${C.border}`, borderRadius:12, padding:"18px 20px", ...style}}>
+    {children}
+  </div>
+);
+
+const CT = ({title, sub}) => (
+  <div style={{marginBottom:12}}>
+    <div style={{fontSize:11, fontWeight:800, color:C.white, letterSpacing:0.8, textTransform:"uppercase"}}>{title}</div>
+    {sub && <div style={{fontSize:9.5, color:C.muted, marginTop:2}}>{sub}</div>}
+  </div>
+);
+
+const KPI = ({label, value, sub, color=C.teal}) => (
+  <div style={{background:C.card, border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", flex:1, minWidth:100, position:"relative", overflow:"hidden"}}>
+    <div style={{position:"absolute", top:0, left:0, width:3, height:"100%", background:color}}/>
+    <div style={{fontSize:22, fontWeight:900, color, paddingLeft:6}}>{value}</div>
+    <div style={{fontSize:9.5, fontWeight:700, color:C.white2, marginTop:2, paddingLeft:6}}>{label}</div>
+    {sub && <div style={{fontSize:8.5, color:C.muted, marginTop:1, paddingLeft:6}}>{sub}</div>}
+  </div>
+);
+
+const PieLabel = ({cx, cy, midAngle, innerRadius, outerRadius, value}) => {
+  const R = Math.PI/180;
+  const r = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + r * Math.cos(-midAngle * R);
+  const y = cy + r * Math.sin(-midAngle * R);
+  if (value < 10) return null;
+  return <text x={x} y={y} fill="#fff" textAnchor="middle" dominantBaseline="central" fontSize={9} fontWeight={700}>{value}%</text>;
+};
+
+function App() {
+  return (
+    <div style={{background:C.bg, minHeight:"100vh", padding:"16px", color:C.white}}>
+
+      {/* HEADER */}
+      <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16, borderBottom:`1px solid ${C.border}`, paddingBottom:14}}>
+        <div style={{display:"flex", alignItems:"center", gap:10}}>
+          <div style={{width:36, height:36, borderRadius:8, background:`linear-gradient(135deg,${C.blue1},${C.teal})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18}}>🧬</div>
+          <div>
+            <div style={{fontSize:18, fontWeight:900, color:C.white}}>OncoClear Diagnostics</div>
+            <div style={{fontSize:10, color:C.muted}}>Multi-Cancer Early Detection · Blood-Based Biomarker Imaging · Series A</div>
+          </div>
+        </div>
+        <div style={{display:"flex", gap:8}}>
+          {[["$120M","Total Raise",C.gold],["$40M","Anchor Ask",C.teal],["2030","FDA Target",C.blue2]].map(([v,l,c],i) => (
+            <div key={i} style={{textAlign:"center", background:C.card, border:`1px solid ${C.border}`, borderRadius:8, padding:"8px 16px"}}>
+              <div style={{fontSize:16, fontWeight:900, color:c}}>{v}</div>
+              <div style={{fontSize:9, color:C.muted}}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* KPIs */}
+      <div style={{display:"flex", gap:8, marginBottom:14, flexWrap:"wrap"}}>
+        <KPI label="Global TAM (2033)"      value="$26.5B" sub="Cancer Dx Imaging"       color={C.blue2}/>
+        <KPI label="Serviceable Market"     value="$8.4B"  sub="Blood-Based Multi-Cancer" color={C.teal}/>
+        <KPI label="OncoClear SOM (2033)"   value="$2.9B"  sub="~11% Market Share"        color={C.gold}/>
+        <KPI label="Test Price"             value="$490"   sub="vs $895–$949 competitors" color={C.purple}/>
+        <KPI label="Sensitivity (Pre-Clin)" value="88%"    sub="vs 75% GRAIL Galleri"     color={C.teal}/>
+        <KPI label="Break-Even"             value="2029"   sub="Post-FDA Clearance"       color={C.red}/>
+      </div>
+
+      {/* ROW 1 */}
+      <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:12}}>
+        <Card>
+          <CT title="Market Opportunity" sub="TAM / SAM / SOM · USD Billions · CAGR 15.3%"/>
+          <ResponsiveContainer width="100%" height={210}>
+            <BarChart data={marketData} barGap={3} barCategoryGap="28%">
+              <CartesianGrid strokeDasharray="3 3" stroke={C.dim} vertical={false}/>
+              <XAxis dataKey="year" tick={{fontSize:10, fill:C.muted}} axisLine={false} tickLine={false}/>
+              <YAxis tickFormatter={v=>`$${v}B`} tick={{fontSize:9, fill:C.muted}} axisLine={false} tickLine={false}/>
+              <Tooltip content={<TT pre="$" suf="B"/>}/>
+              <Legend wrapperStyle={{fontSize:9.5, color:C.muted}}/>
+              <Bar dataKey="TAM" name="TAM" fill={C.blue1} radius={[3,3,0,0]}/>
+              <Bar dataKey="SAM" name="SAM" fill={C.blue2} radius={[3,3,0,0]}/>
+              <Bar dataKey="SOM" name="SOM (OncoClear)" fill={C.teal} radius={[3,3,0,0]}>
+                <LabelList dataKey="SOM" position="top" formatter={v=>v>0?`$${v}B`:""} style={{fontSize:8, fill:C.teal, fontWeight:800}}/>
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+
+        <Card>
+          <CT title="Revenue Forecast vs. Burn" sub="USD Millions · FDA Clearance 2028 · Break-Even 2029"/>
+          <ResponsiveContainer width="100%" height={210}>
+            <AreaChart data={revenueData}>
+              <defs>
+                <linearGradient id="rG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%"  stopColor={C.teal} stopOpacity={0.35}/>
+                  <stop offset="95%" stopColor={C.teal} stopOpacity={0.02}/>
+                </linearGradient>
+                <linearGradient id="cG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%"  stopColor={C.red} stopOpacity={0.25}/>
+                  <stop offset="95%" stopColor={C.red} stopOpacity={0.02}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke={C.dim} vertical={false}/>
+              <XAxis dataKey="year" tick={{fontSize:10, fill:C.muted}} axisLine={false} tickLine={false}/>
+              <YAxis tickFormatter={v=>`$${v}M`} tick={{fontSize:9, fill:C.muted}} axisLine={false} tickLine={false}/>
+              <Tooltip content={<TT pre="$" suf="M"/>}/>
+              <Legend wrapperStyle={{fontSize:9.5, color:C.muted}}/>
+              <Area type="monotone" dataKey="revenue" name="Revenue"   stroke={C.teal} strokeWidth={2.5} fill="url(#rG)" dot={{r:4, fill:C.teal}}/>
+              <Area type="monotone" dataKey="costs"   name="Op. Costs" stroke={C.red}  strokeWidth={2}   fill="url(#cG)" dot={{r:3, fill:C.red}} strokeDasharray="5 4"/>
+            </AreaChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
+
+      {/* ROW 2 */}
+      <div style={{display:"grid", gridTemplateColumns:"1.1fr 0.9fr", gap:12, marginBottom:12}}>
+        <Card>
+          <CT title="Competitive Landscape" sub="Sensitivity · Specificity · Price vs. OncoClear"/>
+          <ResponsiveContainer width="100%" height={190}>
+            <BarChart data={competitors} barGap={4} barCategoryGap="25%" layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke={C.dim} horizontal={false}/>
+              <XAxis type="number" domain={[0,105]} tick={{fontSize:9, fill:C.muted}} axisLine={false} tickLine={false}/>
+              <YAxis type="category" dataKey="name" tick={{fontSize:10, fill:C.white2, fontWeight:600}} axisLine={false} tickLine={false} width={70}/>
+              <Tooltip content={<TT pre="" suf="%"/>}/>
+              <Legend wrapperStyle={{fontSize:9.5, color:C.muted}}/>
+              <Bar dataKey="sensitivity" name="Sensitivity %" radius={[0,3,3,0]}>
+                {competitors.map((c,i) => <Cell key={i} fill={c.name==="OncoClear" ? C.teal : C.blue1}/>)}
+                <LabelList dataKey="sensitivity" position="right" formatter={v=>`${v}%`} style={{fontSize:9, fill:C.white2}}/>
+              </Bar>
+              <Bar dataKey="specificity" name="Specificity %" radius={[0,3,3,0]}>
+                {competitors.map((c,i) => <Cell key={i} fill={c.name==="OncoClear" ? C.gold : C.dim}/>)}
+                <LabelList dataKey="specificity" position="right" formatter={v=>`${v}%`} style={{fontSize:9, fill:C.white2}}/>
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+          <div style={{display:"flex", gap:6, marginTop:8}}>
+            {competitors.map((c,i) => (
+              <div key={i} style={{flex:1, textAlign:"center", background:c.name==="OncoClear"?`${C.teal}22`:C.bg, border:`1px solid ${c.name==="OncoClear"?C.teal:C.border}`, borderRadius:6, padding:"6px 4px"}}>
+                <div style={{fontSize:13, fontWeight:800, color:c.name==="OncoClear"?C.teal:C.white2}}>${c.price}</div>
+                <div style={{fontSize:8.5, color:C.muted}}>{c.name}</div>
+                <div style={{fontSize:7.5, color:C.muted}}>{c.stage}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card>
+          <CT title="Product Positioning Radar" sub="OncoClear vs. Competitors · Score /100"/>
+          <ResponsiveContainer width="100%" height={240}>
+            <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="72%">
+              <PolarGrid stroke={C.dim}/>
+              <PolarAngleAxis dataKey="metric" tick={{fontSize:9, fill:C.muted}}/>
+              <Radar name="OncoClear" dataKey="OncoClear" stroke={C.teal}  fill={C.teal}  fillOpacity={0.28} strokeWidth={2} dot/>
+              <Radar name="GRAIL"     dataKey="GRAIL"     stroke={C.blue2} fill={C.blue2} fillOpacity={0.12} strokeWidth={1.5}/>
+              <Radar name="Guardant"  dataKey="Guardant"  stroke={C.gold}  fill={C.gold}  fillOpacity={0.10} strokeWidth={1.5}/>
+              <Legend wrapperStyle={{fontSize:9.5, color:C.muted}}/>
+              <Tooltip contentStyle={{background:C.card, border:`1px solid ${C.border}`, fontSize:10}}/>
+            </RadarChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
+
+      {/* ROW 3 */}
+      <div style={{display:"grid", gridTemplateColumns:"0.9fr 1.1fr", gap:12, marginBottom:12}}>
+        <Card>
+          <CT title="Series A — Use of Proceeds" sub="Total Raise: $120M · Anchor Ask: $40M"/>
+          <div style={{display:"flex", alignItems:"center", gap:12}}>
+            <ResponsiveContainer width={160} height={160}>
+              <PieChart>
+                <Pie data={fundingPie} cx={75} cy={75} innerRadius={46} outerRadius={74} paddingAngle={2} dataKey="value" labelLine={false} label={PieLabel}>
+                  {fundingPie.map((e,i) => <Cell key={i} fill={e.color}/>)}
+                </Pie>
+                <Tooltip formatter={(v,n,p) => [`$${p.payload.amt}M (${v}%)`, p.payload.name]} contentStyle={{background:C.card, border:`1px solid ${C.border}`, fontSize:10}}/>
+              </PieChart>
+            </ResponsiveContainer>
+            <div style={{flex:1}}>
+              {fundingPie.map((d,i) => (
+                <div key={i} style={{display:"flex", alignItems:"center", gap:6, marginBottom:7}}>
+                  <div style={{width:8, height:8, borderRadius:2, background:d.color, flexShrink:0}}/>
+                  <div style={{flex:1, fontSize:9.5, color:C.white2}}>{d.name}</div>
+                  <div style={{fontWeight:800, fontSize:10.5, color:d.color}}>${d.amt}M</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{marginTop:10, borderTop:`1px solid ${C.border}`, paddingTop:10, display:"flex", gap:10}}>
+            {[["$40M","Anchor Lead",C.teal],["$80M","Co-Investors",C.gold],["36mo","Runway",C.purple]].map(([v,l,c],i) => (
+              <div key={i} style={{flex:1, textAlign:"center"}}>
+                <div style={{fontSize:14, fontWeight:900, color:c}}>{v}</div>
+                <div style={{fontSize:8.5, color:C.muted}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card>
+          <CT title="Net Income Trajectory" sub="Revenue minus Operating Costs · USD Millions · Inflection 2030"/>
+          <ResponsiveContainer width="100%" height={175}>
+            <BarChart data={revenueData} barCategoryGap="35%">
+              <CartesianGrid strokeDasharray="3 3" stroke={C.dim} vertical={false}/>
+              <XAxis dataKey="year" tick={{fontSize:10, fill:C.muted}} axisLine={false} tickLine={false}/>
+              <YAxis tickFormatter={v=>`$${v}M`} tick={{fontSize:9, fill:C.muted}} axisLine={false} tickLine={false}/>
+              <Tooltip content={<TT pre="$" suf="M"/>}/>
+              <Bar dataKey="net" name="Net Income" radius={[4,4,0,0]}>
+                {revenueData.map((d,i) => <Cell key={i} fill={d.net>=0 ? C.teal : C.red}/>)}
+                <LabelList dataKey="net" position="top" formatter={v=>`$${v}M`} style={{fontSize:8, fill:C.white2, fontWeight:700}}/>
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+          <div style={{marginTop:10, display:"flex", gap:8}}>
+            {[["$145M","2032 Revenue",C.teal],["~34%","Projected IRR",C.gold],["2029","Break-Even",C.blue2],["$133M","2032 Net",C.purple]].map(([v,l,c],i) => (
+              <div key={i} style={{flex:1, textAlign:"center", background:C.bg, borderRadius:6, padding:"7px 4px"}}>
+                <div style={{fontSize:13, fontWeight:800, color:c}}>{v}</div>
+                <div style={{fontSize:8, color:C.muted}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {/* FOOTER */}
+      <div style={{borderTop:`1px solid ${C.border}`, paddingTop:10, display:"flex", justifyContent:"space-between"}}>
+        <div style={{fontSize:8.5, color:C.muted}}>Sources: Grand View Research 2024 · AJMC 2025 · GRAIL 2025 · Guardant Health 2025 · PathAI 2025</div>
+        <div style={{fontSize:8.5, color:C.muted}}>OncoClear Diagnostics · BIOT 5219 · <span style={{color:C.gold}}>CONFIDENTIAL — For Investor Use Only</span></div>
+      </div>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
